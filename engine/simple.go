@@ -5,7 +5,10 @@ import (
 	"log"
 )
 
-func Run(seeds ...Request) {
+type SimleEngine struct {
+}
+
+func (e SimleEngine) Run(seeds ...Request) {
 	var requests []Request
 	// 拿到seeds 之后遍历seeds    推到requests中
 	for _, r := range seeds {
@@ -44,7 +47,6 @@ func Run(seeds ...Request) {
 //	Items    []interface{}
 //}
 func worker(r Request) (ParseResult, error) {
-	log.Printf("Fetching %s", r.Url)
 	// 发起请求，获得返回的内容
 	body, err := fetcher.Fetch(r.Url)
 	if err != nil {

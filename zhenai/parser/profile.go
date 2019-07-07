@@ -1,8 +1,8 @@
 package parser
 
 import (
+	"awesomeProject/crawler/engine"
 	"awesomeProject/crawler/model"
-	"awesomeProject/crawler/zhenai/engine"
 	"fmt"
 	"regexp"
 )
@@ -21,7 +21,8 @@ func ParseProfile(contents []byte, name string) engine.ParseResult {
 	single := getUser(singleRe, contents)
 
 	profile.Single = single
-	fmt.Printf("%s", profile.Name)
+
+	fmt.Printf("%s\n", profile.Name)
 
 	return engine.ParseResult{}
 

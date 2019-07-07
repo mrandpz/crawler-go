@@ -1,7 +1,7 @@
 package parser
 
 import (
-	"awesomeProject/crawler/zhenai/engine"
+	"awesomeProject/crawler/engine"
 	"regexp"
 )
 
@@ -14,7 +14,6 @@ func ParseCityList(contents []byte) engine.ParseResult {
 
 	result := engine.ParseResult{}
 	for _, m := range all {
-		result.Items = append(result.Items, "City "+string(m[2]))
 		result.Requests = append(result.Requests, engine.Request{
 			Url:        string(m[1]),
 			ParserFunc: ParseCity,
