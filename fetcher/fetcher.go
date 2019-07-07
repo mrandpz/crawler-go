@@ -22,6 +22,7 @@ func Fetch(url string) ([]byte, error) {
 		fmt.Printf("wrong http request: %s", err.Error())
 		return nil, fmt.Errorf("wrong http request: %s", err.Error())
 	}
+	// 解决珍爱网浏览器限制
 	request.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36")
 	resp, err := client.Do(request)
 	if err != nil {
@@ -32,8 +33,9 @@ func Fetch(url string) ([]byte, error) {
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("Wrong status code %d", resp.StatusCode)
 	}
-
+	// 读取返回的内容
 	newReader := bufio.NewReader(resp.Body)
+	// 解决网页可能不是utf-8
 	e := determinEncoding(newReader)
 	reader := transform.NewReader(resp.Body, e.NewDecoder())
 
