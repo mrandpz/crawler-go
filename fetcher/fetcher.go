@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"time"
 
 	"golang.org/x/text/encoding/unicode"
 
@@ -15,7 +16,12 @@ import (
 	"golang.org/x/text/transform"
 )
 
+// 考虑加ratelimit
+var rateLimiter = time.Tick(1 * time.Microsecond)
+
 func Fetch(url string) ([]byte, error) {
+	<-rateLimiter
+
 	client := http.Client{}
 	request, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -35,6 +41,7 @@ func Fetch(url string) ([]byte, error) {
 	}
 	// 读取返回的内容
 	newReader := bufio.NewReader(resp.Body)
+
 	// 解决网页可能不是utf-8
 	e := determinEncoding(newReader)
 	reader := transform.NewReader(resp.Body, e.NewDecoder())

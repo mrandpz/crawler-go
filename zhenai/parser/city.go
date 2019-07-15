@@ -11,7 +11,7 @@ var (
 )
 
 // 从第一次获取的城市列表中获得的链接，点击进入第一页用户列表，再执行解析用户信息
-func ParseCity(contents []byte) engine.ParseResult {
+func ParseCity(contents []byte, _ string) engine.ParseResult {
 	// 从正则中获取 信息
 	all := profileRe.FindAllSubmatch(contents, -1)
 
@@ -20,10 +20,8 @@ func ParseCity(contents []byte) engine.ParseResult {
 	for _, m := range all {
 		name := string(m[2])
 		result.Requests = append(result.Requests, engine.Request{
-			Url: string(m[1]),
-			ParserFunc: func(c []byte) engine.ParseResult {
-				return ParseProfile(c, name)
-			},
+			Url:        string(m[1]),
+			ParserFunc: ProfileParser(name),
 		})
 	}
 

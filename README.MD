@@ -4,3 +4,19 @@
 3、数据存储和展示   
 4、分布式爬虫  
 
+ElasticSearch
+
+index/type/id
+
+database/table/字段
+
+### 基本使用方法
+
+index/type/_search 找出所有内容  
+index/type/_search?q=golang 找出所有内容
+
+用post 可以省略id，会自动帮我们生成id
+
+ES用的v6版本，一直下不下来，正确的下载方式：  
+go get github.com/olivere/elastic  
+git checkout -b release-branch.v6 origin/release-branch.v6  

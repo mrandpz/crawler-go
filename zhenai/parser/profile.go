@@ -3,16 +3,20 @@ package parser
 import (
 	"awesomeProject/crawler/engine"
 	"awesomeProject/crawler/model"
-	"fmt"
 	"regexp"
+	"strings"
 )
 
 var singleRe = regexp.MustCompile(`<div class="m-btn [0-9a-z]+" [^>]*>([^<]+)</div>`)
 
 //var singleRe = regexp.MustCompile(`<div class="m-btn purple" [^>]*>([^<]+)</div>`)
 
+//type ParseResult struct {
+//	Requests []Request
+//	Items    []interface{}
+//}
 // 解析用户信息
-func ParseProfile(contents []byte, name string) engine.ParseResult {
+func ParseProfile(contents []byte, name string, url string) engine.ParseResult {
 	profile := model.Profile{}
 
 	profile.Name = name
@@ -22,29 +26,44 @@ func ParseProfile(contents []byte, name string) engine.ParseResult {
 
 	profile.Single = single
 
-	fmt.Printf("%s\n", profile.Name)
+	var reqs []engine.Request
 
-	return engine.ParseResult{}
+	str := strings.Replace(url,
+		"http://album.zhenai.com/u/", "", -1)
+
+	result := engine.ParseResult{
+		Requests: reqs,
+		Items: []engine.Item{
+			{
+				Type:    "zhenai",
+				Url:     url,
+				Id:      str,
+				Payload: profile,
+			},
+		},
+	}
+
+	return result
 
 }
 
-func getUser(re *regexp.Regexp, contents []byte) []interface{} {
+func getUser(re *regexp.Regexp, contents []byte) []string {
 	// 找到所有匹配的
 	all := re.FindAllSubmatch(contents, -1)
 
-	var data []interface{}
+	var data []string
 	if all != nil {
-		//fmt.Printf("%s", all)
 		//
 		for _, tags := range all {
-			//fmt.Printf("tags[0]= %s", tags[0])
-			//fmt.Println()
-			// 找到匹配的
 			allSub := re.FindSubmatch(tags[0])
-			//
-			data = append(data, allSub[1])
-			//fmt.Println()
+			data = append(data, string(allSub[1]))
 		}
 	}
 	return data
+}
+
+func ProfileParser(name string) engine.ParserFun {
+	return func(c []byte, url string) engine.ParseResult {
+		return ParseProfile(c, name, url)
+	}
 }
