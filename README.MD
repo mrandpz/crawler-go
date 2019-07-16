@@ -20,3 +20,8 @@ index/type/_search?q=golang 找出所有内容
 ES用的v6版本，一直下不下来，正确的下载方式：  
 go get github.com/olivere/elastic  
 git checkout -b release-branch.v6 origin/release-branch.v6  
+
+消息传递的方法
+REST 
+RPC 
+中间件  
