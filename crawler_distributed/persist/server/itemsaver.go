@@ -22,6 +22,7 @@ func serveRpc(host, index string) error {
 		return err
 	}
 
+	fmt.Println("itemsaver")
 	// 创建一个RPC
 	return rpcsupport2.ServeRpc(host,
 		&persist2.ItemSaverService{

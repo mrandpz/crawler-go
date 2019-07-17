@@ -14,7 +14,7 @@ import (
 //	Requests []Request
 //	Items    []interface{}
 //}
-func worker(r Request) (ParseResult, error) {
+func Worker(r Request) (ParseResult, error) {
 	// 发起请求，获得返回的内容
 	body, err := fetcher.Fetch(r.Url)
 	if err != nil {
@@ -23,5 +23,5 @@ func worker(r Request) (ParseResult, error) {
 	}
 
 	// 解析body返回parseResult
-	return r.ParserFunc(body, r.Url), nil
+	return r.Parser.Parse(body, r.Url), nil
 }

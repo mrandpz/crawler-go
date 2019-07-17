@@ -21,7 +21,7 @@ func (e SimleEngine) Run(seeds ...Request) {
 		requests = requests[1:]
 
 		// 一个worker发起一个请求返回解析后的数据 parseResult
-		parseResult, e := worker(r)
+		parseResult, e := Worker(r)
 		if e != nil {
 			continue
 		}

@@ -16,7 +16,7 @@ var singleRe = regexp.MustCompile(`<div class="m-btn [0-9a-z]+" [^>]*>([^<]+)</d
 //	Items    []interface{}
 //}
 // 解析用户信息
-func ParseProfile(contents []byte, name string, url string) engine.ParseResult {
+func parseProfile(contents []byte, name string, url string) engine.ParseResult {
 	profile := model.Profile{}
 
 	profile.Name = name
@@ -62,8 +62,20 @@ func getUser(re *regexp.Regexp, contents []byte) []string {
 	return data
 }
 
-func ProfileParser(name string) engine.ParserFun {
-	return func(c []byte, url string) engine.ParseResult {
-		return ParseProfile(c, name, url)
+type ProfileParser struct {
+	userName string
+}
+
+func (p *ProfileParser) Parse(contens []byte, url string) engine.ParseResult {
+	return parseProfile(contens, url, p.userName)
+}
+
+func (p *ProfileParser) Serialize() (name string, args interface{}) {
+	return "ProfileParser", p.userName
+}
+
+func NewProfileParser(name string) *ProfileParser {
+	return &ProfileParser{
+		userName: name,
 	}
 }

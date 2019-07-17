@@ -25,3 +25,10 @@ git checkout -b release-branch.v6 origin/release-branch.v6
 REST 
 RPC 
 中间件  
+
+
+分布式爬虫
+
+运行 persist 下的itemsaver.go
+运行 woker下面的 woker.go
+运行 main.go 
