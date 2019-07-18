@@ -32,3 +32,28 @@ RPC
 运行 persist 下的itemsaver.go
 运行 woker下面的 woker.go
 运行 main.go 
+
+
+
+集群爬虫
+
+docker run -d -p 9200:9200 elasticsearch:6.7.2
+
+
+启动rpc服务器,用于支持itemsaver服务(item存储到ElasticSearch)  
+crawler-distribute/persist/server/itemsaver.go  
+go run itemsaver.go --port=1234  
+
+
+
+启动rpc服务器,用于支持解析请求和返回结果的服务
+crawler-distribute/worker/server/worker.go  
+go run worker.go --port=9000  
+go run worker.go --port=9001
+
+ 启动:  
+crawler-distribute/main.go  
+go run main.go -itemsaver_host=":1234" --worker_hosts=":9000,:9001"
+
+启动fronted/started.go
+前端展示:localhost:8888  

@@ -2,19 +2,13 @@ package client
 
 import (
 	"awesomeProject/crawler/crawler_distributed/config"
-	"awesomeProject/crawler/crawler_distributed/rpcsupport"
 	worker "awesomeProject/crawler/crawler_distributed/woker"
 	"awesomeProject/crawler/engine"
-	"fmt"
+	"net/rpc"
 )
 
-func CreateProcessor() (engine.Processor, error) {
-	client, err := rpcsupport.NewClient(
-		fmt.Sprintf(":%d", config.WorkerPort0))
-
-	if err != nil {
-		return nil, err
-	}
+func CreateProcessor(
+	clientChan chan *rpc.Client) engine.Processor {
 
 	return func(
 		req engine.Request) (
@@ -24,13 +18,13 @@ func CreateProcessor() (engine.Processor, error) {
 
 		var sResult worker.ParseResult
 
-		e := client.Call(config.CrawlServiceRpc, sReq, &sResult)
+		c := <-clientChan
+		e := c.Call(config.CrawlServiceRpc, sReq, &sResult)
 
 		if e != nil {
-			fmt.Println(e)
-			return engine.ParseResult{}, err
+			return engine.ParseResult{}, e
 		}
 
 		return worker.DeserializeResult(sResult), nil
-	}, nil
+	}
 }

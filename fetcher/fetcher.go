@@ -1,6 +1,7 @@
 package fetcher
 
 import (
+	"awesomeProject/crawler/crawler_distributed/config"
 	"bufio"
 	"fmt"
 	"io/ioutil"
@@ -17,11 +18,12 @@ import (
 )
 
 // 考虑加ratelimit
-var rateLimiter = time.Tick(1 * time.Microsecond)
+var rateLimiter = time.Tick(time.Second / config.Qps)
 
 func Fetch(url string) ([]byte, error) {
 	<-rateLimiter
 
+	log.Printf("Fetching url %s", url)
 	client := http.Client{}
 	request, err := http.NewRequest("GET", url, nil)
 	if err != nil {

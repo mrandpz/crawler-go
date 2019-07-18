@@ -8,7 +8,6 @@ const (
 
 	// Service ports
 	ItemSaverPort = 1234
-	WorkerPort0   = 9000
 
 	// es
 	ElasticIndex = "dating_profile"
@@ -16,4 +15,7 @@ const (
 	// RPC EndPoint
 	ItemSaverRpc    = "ItemSaverService.Save"
 	CrawlServiceRpc = "CrawlService.Process"
+
+	// Rate limiting
+	Qps = 20
 )
